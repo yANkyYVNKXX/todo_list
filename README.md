@@ -1,7 +1,3 @@
-Страница со всеми заявками:
-  - если переключить на фильтр по дате, фильтрует по первой дате
-  - в debounce передал 0.5s
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
