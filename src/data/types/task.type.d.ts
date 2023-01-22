@@ -1,1 +1,1 @@
-declare type TaskType = {title: string; text: string};
+declare type TaskType = {title: string; text: string; id: number};

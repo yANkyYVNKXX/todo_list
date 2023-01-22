@@ -1,12 +1,13 @@
 import {Checkbox, Grid, Typography} from '@mui/material';
 import {ChangeEvent, useMemo, useState} from 'react';
 
-import {NewTask} from 'data/types/new_type.type';
+import {NewTaskType} from 'data/types/new_type.type';
 
-import {addTask} from 'core/helpers';
+import {addTask, sortTasks} from 'core/helpers';
 
 import {PopoverSettings} from 'presentation/components/popover_settings';
-import {Tasks} from 'presentation/components/today_tasks';
+import {Tasks} from 'presentation/components/tasks';
+import {TodayTask} from 'presentation/components/today_task';
 import {palette} from 'presentation/config/pallete';
 import {Styles} from 'presentation/types/styles.type';
 
@@ -14,18 +15,18 @@ export const TodoList = () => {
   const [tasks, setTask] = useState<TasksType>({});
   const [showTodayTasks, setShowTodayTasks] = useState(true);
 
-  const tasksFormated = useMemo(() => Object.entries<TaskType[]>(tasks), [tasks]);
-
-  const handleAddTask = (newTask: NewTask) => {
-    setTask((prev) => addTask(prev, newTask));
-  };
+  const {sortedTasks, todayTasks} = useMemo(() => sortTasks(tasks), [tasks]);
 
   const handleShowTodayTasks = (e: ChangeEvent<HTMLInputElement>) => {
     setShowTodayTasks(e.target.checked);
   };
 
+  const handleAddTask = (newTask: NewTaskType) => {
+    setTask((prev) => addTask(prev, newTask));
+  };
+
   return (
-    <Grid container direction="column" alignItems="center" sx={styles.container} bgcolor="background.secondary">
+    <Grid container direction="column" alignItems="center" bgcolor="background.secondary" sx={styles.container}>
       <Grid item container paddingX="20px" paddingTop="13px" alignItems="center" justifyContent="space-between">
         <Typography variant="h4">To Do</Typography>
         <PopoverSettings addTask={handleAddTask} />
@@ -33,9 +34,10 @@ export const TodoList = () => {
           <Checkbox onChange={handleShowTodayTasks} checked={showTodayTasks} />
           <Typography variant="primary">Today Tasks:</Typography>
         </Grid>
-        {tasksFormated.map((tasks) => (
+        {todayTasks && <TodayTask tasks={todayTasks[1]} showTasks={showTodayTasks} />}
+        {sortedTasks.map((tasks) => (
           <Grid item xs={12}>
-            <Tasks showTodayTasks={showTodayTasks} date={tasks[0]} tasks={tasks[1]} />
+            <Tasks key={tasks[1][0].id} date={tasks[0]} tasks={tasks[1]} />
           </Grid>
         ))}
       </Grid>

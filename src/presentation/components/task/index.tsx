@@ -1,5 +1,5 @@
-import {Box, Grid, Switch, Typography} from '@mui/material';
-import {useMemo} from 'react';
+import {Box, Grid, Switch, Typography, Tooltip} from '@mui/material';
+import {ChangeEvent, useMemo, useState} from 'react';
 
 import {getRandomColor} from 'core/helpers';
 
@@ -16,19 +16,32 @@ type Props = {
 
 export const Task = ({title, text}: Props) => {
   const randomColor = useMemo(() => getRandomColor(), []);
+  const [taskComplete, setTaskComplete] = useState(false);
+
+  const handleTaskComplete = (e: ChangeEvent<HTMLInputElement>) => setTaskComplete(e.target.checked);
 
   return (
     <Grid container alignItems="center" sx={styles.container}>
       <GridBorderLeft item xs={9} overflow="hidden" borderColor={randomColor}>
-        <Typography variant="primary" sx={styles.textOverflow} marginBottom="5px" marginLeft="14px">
-          {title}
-        </Typography>
-        <Typography variant="secondary" sx={styles.textOverflow} marginLeft="14px">
-          {text}
-        </Typography>
+        <Tooltip title={title}>
+          <Typography
+            variant="primary"
+            sx={{textDecoration: taskComplete ? 'line-through' : 'initial', ...styles.textOverflow}}
+            marginBottom="5px"
+            marginLeft="14px">
+            {title}
+          </Typography>
+        </Tooltip>
+        <Tooltip title={text}>
+          <Typography variant="secondary" sx={styles.textOverflow} marginLeft="14px">
+            {text}
+          </Typography>
+        </Tooltip>
       </GridBorderLeft>
       <Grid item container xs={3} justifyContent="flex-end">
         <Switch
+          value={taskComplete}
+          onChange={handleTaskComplete}
           icon={
             <Box sx={styles.switcherIcon}>
               <SwitcherIcon />
@@ -59,6 +72,7 @@ const styles: Styles = {
     background: 'white',
   },
   textOverflow: {
+    cursor: 'default',
     display: 'block',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

@@ -2,9 +2,9 @@ import {Box, Button, Grid, Popover, TextField, Typography} from '@mui/material';
 import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, {Dayjs} from 'dayjs';
-import {ChangeEvent, FormEvent, MouseEvent, useState} from 'react';
+import {ChangeEvent, FormEvent, memo, MouseEvent, useState} from 'react';
 
-import {NewTask} from 'data/types/new_type.type';
+import {NewTaskType} from 'data/types/new_type.type';
 
 import {palette} from 'presentation/config/pallete';
 import {Styles} from 'presentation/types/styles.type';
@@ -12,10 +12,10 @@ import {Styles} from 'presentation/types/styles.type';
 import {ReactComponent as Settings} from 'assets/images/icons/settings.svg';
 
 type Props = {
-  addTask: (newTask: NewTask) => void;
+  addTask: (newTask: NewTaskType) => void;
 };
 
-export const PopoverSettings = ({addTask}: Props) => {
+const PopoverSettingsComponent = ({addTask}: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [date, setDate] = useState<Dayjs>(dayjs(Date.now()));
   const [title, setTitle] = useState('');
@@ -43,7 +43,7 @@ export const PopoverSettings = ({addTask}: Props) => {
 
   const handleAddTask = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTask({text, title, date});
+    addTask({text, title, date, id: Date.now()});
     setAnchorEl(null);
   };
 
@@ -89,6 +89,8 @@ export const PopoverSettings = ({addTask}: Props) => {
     </Box>
   );
 };
+
+export const PopoverSettings = memo(PopoverSettingsComponent);
 
 const styles: Styles = {
   datePicker: {

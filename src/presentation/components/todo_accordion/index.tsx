@@ -13,6 +13,8 @@ type Props = {
 };
 
 const TodoAccordionComponent = ({children, title}: Props) => {
+  console.log('render');
+
   return (
     <Accordion sx={styles.accordion}>
       <AccordionSummary sx={styles.accordionSummary} aria-controls="panel1a-content" id="panel1a-header">

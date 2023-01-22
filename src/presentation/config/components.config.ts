@@ -81,11 +81,7 @@ export const components: Components = {
       sx: {
         padding: '0',
         background: 'transparent',
-        color: 'white',
-        '&:hover': {
-          color: 'white',
-          background: 'transparent',
-        },
+        color: 'white!important',
       },
     },
   },

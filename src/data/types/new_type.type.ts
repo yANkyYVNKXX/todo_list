@@ -1,5 +1,5 @@
 import {Dayjs} from 'dayjs';
 
-export type NewTask = Omit<TaskType, 'date'> & {
+export type NewTaskType = Omit<TaskType, 'date'> & {
   date: Dayjs;
 };
