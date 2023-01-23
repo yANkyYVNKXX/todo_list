@@ -1,5 +1,5 @@
 import {Checkbox, Grid, Typography} from '@mui/material';
-import {ChangeEvent, useMemo, useState} from 'react';
+import {ChangeEvent, useCallback, useMemo, useState} from 'react';
 
 import {NewTaskType} from 'data/types/new_type.type';
 
@@ -21,9 +21,10 @@ export const TodoList = () => {
     setShowTodayTasks(e.target.checked);
   };
 
-  const handleAddTask = (newTask: NewTaskType) => {
+  //избавляемся от ненужных рендеров дочерних компонент, т.к. useCallback возвращает ту же ссылку на функцию
+  const handleAddTask = useCallback((newTask: NewTaskType) => {
     setTask((prev) => addTask(prev, newTask));
-  };
+  }, []);
 
   return (
     <Grid container direction="column" alignItems="center" bgcolor="background.secondary" sx={styles.container}>
@@ -34,10 +35,11 @@ export const TodoList = () => {
           <Checkbox onChange={handleShowTodayTasks} checked={showTodayTasks} />
           <Typography variant="primary">Today Tasks:</Typography>
         </Grid>
+        {!sortedTasks.length && !todayTasks && <Typography variant="secondary">Please add tasks...</Typography>}
         {todayTasks && <TodayTask tasks={todayTasks[1]} showTasks={showTodayTasks} />}
         {sortedTasks.map((tasks) => (
-          <Grid item xs={12}>
-            <Tasks key={tasks[1][0].id} date={tasks[0]} tasks={tasks[1]} />
+          <Grid key={tasks[1][0].id} item xs={12}>
+            <Tasks date={tasks[0]} tasks={tasks[1]} />
           </Grid>
         ))}
       </Grid>

@@ -18,7 +18,7 @@ const TasksComponent = ({tasks, date}: Props) => {
 
     if (isTomorrowTask) return 'Tomorrow';
 
-    return dayjs(date).format('DD/MM').toString();
+    return dayjs(date).format('DD/MM/YYYY').toString();
   }, [date]);
 
   return (
